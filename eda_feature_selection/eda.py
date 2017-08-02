@@ -72,9 +72,11 @@ dfnum = dfnum.drop(dfnum[dfnum['Id'] == 524].index)
 
 #Create Heatmap of Correlated variables
 dfnum_corr1 = dfnum.corr()
-cols = dfnum_corr1.nlargest(10, 'SalePrice')['SalePrice'].index
+cols = dfnum_corr1.nlargest(20, 'SalePrice')['SalePrice'].index
 cm = np.corrcoef(dfnum[cols].values.T)
 hm = sns.heatmap(cm, cbar=True, annot=True, square=True, fmt='.2f', annot_kws={'size': 10}, yticklabels=cols.values, xticklabels=cols.values)
+plt.xticks(rotation=90, label='small')
+plt.yticks(rotation=90, label='small')
 plt.show()
 
 

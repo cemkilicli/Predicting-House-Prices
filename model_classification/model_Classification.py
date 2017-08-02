@@ -6,6 +6,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.decomposition import PCA
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import mean_squared_error
+
 
 test = pd.read_csv("./data/test.csv")
 train = pd.read_csv("./data/train.csv")
@@ -31,16 +33,22 @@ train["SalePrice"].replace("", np.nan, inplace=True)
 train = train.dropna(subset=["SalePrice"], how="all")
 
 
+summary_train=train["SalePrice"].describe()
+print summary_train
+
 
 # Create bins for categories
 min_salesprice = train["SalePrice"].min() -1
 max_salesprice = train["SalePrice"].max() +1
-median_salesprice = train["SalePrice"].median()
-low_salesprice = (min_salesprice + median_salesprice)/2
-high_salesprice = (max_salesprice + median_salesprice)/2
+mean_salesprice = train["SalePrice"].mean()
+low_salesprice = train["SalePrice"].quantile(q=0.25)
+high_salesprice = train["SalePrice"].quantile(q=0.75)
+
+
+
 
 # Create bins and categories
-bins = [min_salesprice, low_salesprice, median_salesprice, high_salesprice, max_salesprice]
+bins = [min_salesprice, low_salesprice, mean_salesprice, high_salesprice, max_salesprice]
 group_names = [1, 2, 3, 4]
 categories = pd.cut(train['SalePrice'], bins, labels=group_names)
 train['categories'] = pd.cut(train['SalePrice'], bins, labels=group_names)
@@ -78,7 +86,9 @@ np.set_printoptions(precision=2)
 
 
 # Print Accuracy Score
-print "Accuracy is", accuracy_score(pred,labels_test)
+print "Accuracy is", accuracy_score(labels_test,pred)
+print "Mean sqared error", mean_squared_error(labels_test, pred)
 print "The number of correct predictions is", accuracy_score(pred,labels_test, normalize=False)
 print "Total sample used is", len(pred)  # number of all of the predictions
+
 

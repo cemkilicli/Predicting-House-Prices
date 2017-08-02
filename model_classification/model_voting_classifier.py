@@ -6,6 +6,8 @@ from sklearn.metrics import accuracy_score
 from sklearn.decomposition import PCA
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import mean_squared_error
+
 
 test = pd.read_csv("./data/test.csv")
 train = pd.read_csv("./data/train.csv")
@@ -35,12 +37,12 @@ train = train.dropna(subset=["SalePrice"], how="all")
 # Create bins for categories
 min_salesprice = train["SalePrice"].min() -1
 max_salesprice = train["SalePrice"].max() +1
-median_salesprice = train["SalePrice"].median()
-low_salesprice = (min_salesprice + median_salesprice)/2
-high_salesprice = (max_salesprice + median_salesprice)/2
+mean_salesprice = train["SalePrice"].mean()
+low_salesprice = train["SalePrice"].quantile(q=0.25)
+high_salesprice = train["SalePrice"].quantile(q=0.75)
 
 # Create bins and categories
-bins = [min_salesprice, low_salesprice, median_salesprice, high_salesprice, max_salesprice]
+bins = [min_salesprice, low_salesprice, mean_salesprice, high_salesprice, max_salesprice]
 group_names = [1, 2, 3, 4]
 categories = pd.cut(train['SalePrice'], bins, labels=group_names)
 train['categories'] = pd.cut(train['SalePrice'], bins, labels=group_names)
@@ -84,4 +86,5 @@ from sklearn.metrics import accuracy_score
 for clf in (log_clf,rnd_clf,nb_clf,voting_clf):
     clf.fit(features_train,labels_train)
     y_pred = clf.predict(features_test)
-    print (clf.__class__.__name__, accuracy_score(labels_test,y_pred))
+    print (clf.__class__.__name__, "accuracy is", accuracy_score(labels_test,y_pred))
+    print (clf.__class__.__name__, "mean squared error is", mean_squared_error(labels_test, y_pred))

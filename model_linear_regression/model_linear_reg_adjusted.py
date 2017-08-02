@@ -4,6 +4,8 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.decomposition import PCA
+from sklearn.metrics import mean_squared_error
+
 
 test = pd.read_csv("./data/test.csv")
 train = pd.read_csv("./data/train.csv")
@@ -66,6 +68,7 @@ features_train, features_test, labels_train, labels_test = train_test_split(data
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_predict
 lr = LinearRegression()
+lr.fit(features_train, labels_train)
 
 # cross_val_predict returns an array of the same size as `y` where each entry
 # is a prediction obtained by cross validation:
@@ -79,14 +82,13 @@ ax.set_ylabel('Predicted')
 plt.show()
 
 # Train the model using the training sets
-lr.fit(features_train, labels_train)
 
+pred = lr.predict(features_test)
 
 # The coefficients
 print('Coefficients: \n', lr.coef_)
 # The mean squared error
-print("Mean squared error: %.2f"
-      % np.mean((lr.predict(features_test) - labels_test) ** 2))
+print "Mean sqared error", mean_squared_error(labels_test, pred)
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % lr.score(features_test, labels_test))
 
