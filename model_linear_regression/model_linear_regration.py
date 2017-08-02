@@ -1,10 +1,11 @@
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-from sklearn.metrics import accuracy_score
-from sklearn.decomposition import PCA
 from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_predict
+from sklearn.preprocessing import Imputer
+
 
 
 test = pd.read_csv("./data/test.csv")
@@ -48,7 +49,6 @@ data_labels_train = train["SalePrice"]
 
 
 #Handle missing values in Training Data Set
-from sklearn.preprocessing import Imputer
 imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
 imp.fit(data_features_train)
 data_features_train = imp.transform(data_features_train)
@@ -58,8 +58,7 @@ data_features_train = imp.transform(data_features_train)
 features_train, features_test, labels_train, labels_test = train_test_split(data_features_train, data_labels_train, test_size=0.25, random_state=42)
 
 
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_val_predict
+
 lr = LinearRegression()
 lr.fit(features_train, labels_train)
 
