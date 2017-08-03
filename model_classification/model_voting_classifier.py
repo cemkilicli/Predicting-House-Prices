@@ -69,7 +69,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 
 log_clf = LogisticRegression()
-rnd_clf = RandomForestClassifier()
+rnd_clf = RandomForestClassifier(class_weight=({2:0.5, 3:1.1}))
 nb_clf = GaussianNB()
 
 voting_clf = VotingClassifier(
