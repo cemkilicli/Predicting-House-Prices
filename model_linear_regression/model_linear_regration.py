@@ -40,8 +40,10 @@ print("There is {} strongly correlated values with SalePrice:\n{}".format(len(go
 #separate features
 data_features_train = train.drop("SalePrice", axis=1)
 # select top 8 features that are highly corrolated with sales price
-data_features_train = data_features_train.filter(["OverallQual", "GrLivArea", "GarageCars", "GarageArea", "TotalBsmtSF", "1stFlrSF", "FullBath", "TotRmsAbvGrd"],axis=1)
-print data_features_train.head(5)
+data_features_train = data_features_train.filter(["OverallQual", "GrLivArea", "GarageCars",
+                                                  "GarageArea", "TotalBsmtSF", "1stFlrSF",
+                                                  "FullBath", "TotRmsAbvGrd","YearRemodAdd",
+                                                  ],axis=1)
 
 
 

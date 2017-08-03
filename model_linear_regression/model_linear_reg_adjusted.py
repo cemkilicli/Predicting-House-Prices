@@ -50,7 +50,7 @@ data_features_train = train.drop("SalePrice", axis=1)
 data_features_train = data_features_train.filter(["OverallQual", "GrLivArea", "GarageCars",
                                                   "GarageArea", "TotalBsmtSF", "1stFlrSF",
                                                   "FullBath", "TotRmsAbvGrd","YearRemodAdd",
-                                                  "KitchenQual", "ExterQual"],axis=1)
+                                                  ],axis=1)
 
 print data_features_train.head(5)
 
