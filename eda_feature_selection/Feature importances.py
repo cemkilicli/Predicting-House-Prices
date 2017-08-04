@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.ensemble import ExtraTreesClassifier
 
-test = pd.read_csv("./data/test.csv")
-train = pd.read_csv("./data/train.csv")
+test = pd.read_csv("../data/test.csv")
+train = pd.read_csv("../data/train.csv")
 
 from sklearn import preprocessing
 
@@ -25,6 +25,10 @@ for features in cat_labels:
 
 train["SalePrice"].replace("", np.nan, inplace=True)
 train = train.dropna(subset=["SalePrice"], how="all")
+train = train.dropna(subset=["Id"], how="all")
+
+
+print list(train)
 
 # Create bins for categories
 min_salesprice = train["SalePrice"].min() -1
@@ -52,13 +56,14 @@ print train.isnull().any()
 
 #separate features
 data_labels_train = train["categories"]
-data_features_train = train.drop("categories", axis=1)
 
-print data_features_train
-
-print data_labels_train
+drop_labels = ["categories"]
 
 
+for lables in drop_labels:
+    data_features_train = train.drop(lables, axis=1)
+
+from sklearn.ensemble import ExtraTreesClassifier
 
 # Build a forest and compute the feature importances
 forest = ExtraTreesClassifier(n_estimators=250,
@@ -81,7 +86,7 @@ for f in range(data_features_train.shape[1]):
 plt.figure()
 plt.title("Feature importances")
 plt.bar(range(data_features_train.shape[1]), importances[indices],
-       color="r", yerr=std[indices], align="center")
+       color="r")
 feature_names = data_features_train.columns
 plt.xticks(range(data_features_train.shape[1]), feature_names, rotation=90, label='small')
 plt.xlim([-1, data_features_train.shape[1]])

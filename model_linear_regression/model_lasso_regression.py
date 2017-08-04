@@ -5,6 +5,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_predict
 from sklearn.preprocessing import Imputer
+import numpy as np
 
 
 
@@ -62,7 +63,7 @@ plt.show()
 # The coefficients
 print('Coefficients: \n', clf.coef_)
 # The mean squared error
-print "Mean sqared error", mean_squared_error(labels_test, predicted)
+print "Mean sqared error", np.sqrt(np.mean((predicted-labels_test)**2))
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % clf.score(features_test, labels_test))
 

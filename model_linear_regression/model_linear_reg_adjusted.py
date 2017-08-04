@@ -5,6 +5,8 @@ from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import Imputer
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import cross_val_predict
+import seaborn as sns
+import numpy as np
 
 
 test = pd.read_csv("./data/test.csv")
@@ -72,25 +74,31 @@ features_train, features_test, labels_train, labels_test = train_test_split(data
 lr = LinearRegression()
 lr.fit(features_train, labels_train)
 
+# Train the model using the training sets
+predicted = lr.predict(features_test)
+
 # cross_val_predict returns an array of the same size as `y` where each entry
 # is a prediction obtained by cross validation:
-predicted = cross_val_predict(lr, features_train, labels_train, cv=10)
+#predicted = cross_val_predict(lr, features_train, labels_train, cv=10)
 
+"""
 fig, ax = plt.subplots()
 ax.scatter(labels_train, predicted)
 ax.plot([labels_train.min(), labels_train.max()], [labels_train.min(), labels_train.max()], 'k--', lw=4)
 ax.set_xlabel('Measured')
 ax.set_ylabel('Predicted')
 #plt.show()
+"""
 
-# Train the model using the training sets
 
-pred = lr.predict(features_test)
 
 # The coefficients
 print('Coefficients: \n', lr.coef_)
 # The mean squared error
-print "Mean sqared error", mean_squared_error(labels_test, pred)
+print "Mean sqared error", np.sqrt(np.mean((predicted-labels_test)**2))
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % lr.score(features_test, labels_test))
 
+#Regression plot
+sns.regplot(x = labels_test ,  y = predicted ,  data= train)
+plt.show()
