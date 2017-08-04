@@ -37,13 +37,11 @@ print summary_train
 
 
 # Create bins for categories
-min_salesprice = train["SalePrice"].min() -1
-max_salesprice = train["SalePrice"].max() +1
-mean_salesprice = train["SalePrice"].mean()
+min_salesprice = train["SalePrice"].min() - 1
+max_salesprice = train["SalePrice"].max() + 1
+mean_salesprice = train["SalePrice"].median()
 low_salesprice = train["SalePrice"].quantile(q=0.25)
 high_salesprice = train["SalePrice"].quantile(q=0.75)
-
-
 
 
 # Create bins and categories

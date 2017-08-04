@@ -30,14 +30,12 @@ train["SalePrice"].replace("", np.nan, inplace=True)
 train = train.dropna(subset=["SalePrice"], how="all")
 
 
-
 # Create bins for categories
-min_salesprice = train["SalePrice"].min() -1
-max_salesprice = train["SalePrice"].max() +1
+min_salesprice = train["SalePrice"].min() - 1
+max_salesprice = train["SalePrice"].max() + 1
 mean_salesprice = train["SalePrice"].median()
 low_salesprice = train["SalePrice"].quantile(q=0.25)
 high_salesprice = train["SalePrice"].quantile(q=0.75)
-
 
 
 # Create bins and categories
@@ -74,7 +72,7 @@ from sklearn.naive_bayes import GaussianNB
 
 
 log_clf = LogisticRegression()
-rnd_clf = RandomForestClassifier(class_weight=({2:0.5, 3:1.1}))
+rnd_clf = RandomForestClassifier()
 nb_clf = GaussianNB()
 
 voting_clf = VotingClassifier(
@@ -89,4 +87,3 @@ for clf in (log_clf,rnd_clf,nb_clf,voting_clf):
     clf.fit(features_train,labels_train)
     y_pred = clf.predict(features_test)
     print (clf.__class__.__name__, "accuracy is", accuracy_score(labels_test,y_pred))
-    #print (clf.__class__.__name__, "root mean squared error is", ((mean_squared_error(labels_test, y_pred)))**0.5)

@@ -59,17 +59,39 @@ data_features_train = imp.transform(data_features_train)
 # Create train test split
 features_train, features_test, labels_train, labels_test = train_test_split(data_features_train, data_labels_train, test_size=0.25, random_state=42)
 
-from sklearn.ensemble import RandomForestClassifier
-rnd_clf = RandomForestClassifier( n_estimators=300, max_features="auto")
+from sklearn.ensemble import ExtraTreesClassifier
+
+# Build a forest and compute the feature importances
+forest = ExtraTreesClassifier(n_estimators=300,
+                              max_features="auto")
 
 
-rnd_clf.fit(features_train, labels_train)
-pred = rnd_clf.predict(features_test)
+forest.fit(features_train, labels_train)
+pred = forest.predict(features_test)
+
+importances = forest.feature_importances_
+std = np.std([tree.feature_importances_ for tree in forest.estimators_],
+             axis=0)
+indices = np.argsort(importances)[::-1]
+
 
 from sklearn.metrics import accuracy_score
 print "accuracy is", accuracy_score(labels_test, pred)
 print "root mean squared error is", sqrt(mean_squared_error(labels_test, pred))
 
-from sklearn.metrics import confusion_matrix
-print confusion_matrix(labels_test, pred)
+
+# Print the feature ranking
+print("Feature ranking:")
+
+for f in range(data_features_train.shape[1]):
+    print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
+
+# Plot the feature importances of the forest
+plt.figure()
+plt.title("Feature importances")
+plt.bar(range(data_features_train.shape[1]), importances[indices],
+       color="r")
+plt.xticks(range(data_features_train.shape[1]), indices, rotation=90, label='small')
+plt.xlim([-1, data_features_train.shape[1]])
+plt.show()
 

@@ -1,9 +1,9 @@
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import mean_squared_error
+from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import Imputer
 from math import sqrt
 
@@ -47,29 +47,44 @@ train['categories'] = pd.cut(train['SalePrice'], bins, labels=group_names)
 sns.countplot(x="categories", data=train)
 plt.show()
 
+#find null values
+for column in train.columns:
+    if train[column].isnull().any() == True:
+        column_mean = train[column].mean()
+        print column_mean
+        train[column].replace("", np.nan, inplace=True)
+        train[column] = train[column].fillna(column_mean)
+
+# Train, Validate, Test Split
+data_train, data_validate, data_test = np.split(train.sample(frac=1), [int(.6*len(train)), int(.8*len(train))])
+
 # separate features
-data_labels_train = train["categories"]
-data_features_train = train.drop("categories", axis=1)
+labels_train = data_train["categories"]
+features_train = data_train.drop("categories", axis=1)
 
-# Handle missing values in Training Data Set
-imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
-imp.fit(data_features_train)
-data_features_train = imp.transform(data_features_train)
+labels_validate = data_train["categories"]
+features_validate = data_train.drop("categories", axis=1)
 
-# Create train test split
-features_train, features_test, labels_train, labels_test = train_test_split(data_features_train, data_labels_train, test_size=0.25, random_state=42)
+labels_test = data_train["categories"]
+features_test = data_train.drop("categories", axis=1)
 
+# Train model
 from sklearn.ensemble import RandomForestClassifier
 rnd_clf = RandomForestClassifier( n_estimators=300, max_features="auto")
-
-
 rnd_clf.fit(features_train, labels_train)
-pred = rnd_clf.predict(features_test)
 
-from sklearn.metrics import accuracy_score
-print "accuracy is", accuracy_score(labels_test, pred)
-print "root mean squared error is", sqrt(mean_squared_error(labels_test, pred))
 
-from sklearn.metrics import confusion_matrix
-print confusion_matrix(labels_test, pred)
 
+# validate prediction
+pred_validate = rnd_clf.predict(features_validate)
+print " "
+print "Validate Scores"
+print "Accuracy is:", accuracy_score(labels_validate, pred_validate)
+print "RMSE is:", sqrt(mean_squared_error(labels_validate, pred_validate))
+
+# test prediction
+pred_test = rnd_clf.predict(features_test)
+print " "
+print "Test Scores"
+print "Accuracy is:", accuracy_score(labels_test, pred_test)
+print "RMSE is:", sqrt(mean_squared_error(labels_test, pred_test))

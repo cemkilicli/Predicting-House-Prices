@@ -1,16 +1,13 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_val_predict
 from sklearn.preprocessing import Imputer
 import numpy as np
 
-
-
-test = pd.read_csv("../data/test.csv")
 train = pd.read_csv("../data/train.csv")
+
+
+
 
 from sklearn import preprocessing
 
@@ -29,10 +26,23 @@ for features in cat_labels:
     le.fit(train[features])
     train[features] = le.transform(train[features])
 
+
+#find & remove outliers in saleprice
+low_salesprice = train["SalePrice"].quantile(q=0.25)
+high_salesprice = train["SalePrice"].quantile(q=0.75)
+
+IRQ = high_salesprice - low_salesprice
+IRQ = IRQ * 1.5
+outliers = high_salesprice + IRQ
+
+# Remove outliers from sales price
+outliers =  train[train["SalePrice"].gt(outliers)].index
+for outlier in outliers:
+    train.drop(outlier, inplace=True)
+
+
 #separate features
 data_features_train = train.drop("SalePrice", axis=1)
-
-
 data_labels_train = train["SalePrice"]
 
 
@@ -61,9 +71,11 @@ ax.set_ylabel('Predicted')
 plt.show()
 
 # The coefficients
-print('Coefficients: \n', clf.coef_)
+print('Coefficients: \n'), dict(zip(train.columns, clf.coef_))
 # The mean squared error
 print "Mean sqared error", np.sqrt(np.mean((predicted-labels_test)**2))
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % clf.score(features_test, labels_test))
 
+
+#Define the alpha values to test
