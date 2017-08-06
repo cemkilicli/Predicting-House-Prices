@@ -44,13 +44,14 @@ categories = pd.cut(train['SalePrice'], bins, labels=group_names)
 train['categories'] = pd.cut(train['SalePrice'], bins, labels=group_names)
 
 # Display newly created categories
-sns.countplot(x="categories", data=train)
-plt.show()
+#sns.countplot(x="categories", data=train)
+#plt.show()
 
 # separate features
 data_labels_train = train["categories"]
 data_features_train = train.drop("categories", axis=1)
 data_features_train = train.drop("SalePrice", axis=1)
+data_features_train = train.drop("Id", axis=1)
 
 
 # Handle missing values in Training Data Set
@@ -63,20 +64,18 @@ features_train, features_test, labels_train, labels_test = train_test_split(data
 
 from sklearn.ensemble import RandomForestClassifier
 rnd_clf = RandomForestClassifier(n_estimators=350,
-                              criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=2,
-                              min_weight_fraction_leaf=0.0, max_features=12, max_leaf_nodes=None,
+                              criterion='gini', max_depth=50, min_samples_split=2, min_samples_leaf=100,
+                              min_weight_fraction_leaf=0.0, max_features="sqrt", max_leaf_nodes=None,
                               min_impurity_split=1e-07, bootstrap=False, oob_score=False, n_jobs=1,
                               verbose=0, warm_start=True, class_weight=None)
-
 
 rnd_clf.fit(features_train, labels_train)
 pred = rnd_clf.predict(features_test)
 
-print pred
-
 from sklearn.metrics import accuracy_score
 print "accuracy is", accuracy_score(labels_test, pred)
 print "root mean squared error is", sqrt(mean_squared_error(labels_test, pred))
+print rnd_clf.score(features_train, labels_train)
 
 from sklearn.metrics import confusion_matrix
 print confusion_matrix(labels_test, pred)

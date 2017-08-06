@@ -61,22 +61,23 @@ data_train, data_validate, data_test = np.split(train.sample(frac=1), [int(.6*le
 labels_train = data_train["categories"]
 features_train = data_train.drop("categories", axis=1)
 features_train = data_train.drop("SalePrice", axis=1)
+features_train = data_train.drop("Id", axis=1)
 
 labels_validate = data_train["categories"]
 features_validate = data_train.drop("categories", axis=1)
 features_validate = data_train.drop("SalePrice", axis=1)
+features_validate = data_train.drop("Id", axis=1)
 
 labels_test = data_train["categories"]
 features_test = data_train.drop("categories", axis=1)
 features_test = data_train.drop("SalePrice", axis=1)
+features_test = data_train.drop("Id", axis=1)
 
 # Train model
 from sklearn.ensemble import RandomForestClassifier
 rnd_clf = RandomForestClassifier(n_estimators=350,
-                              criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=2,
-                              min_weight_fraction_leaf=0.0, max_features=12, max_leaf_nodes=None,
-                              min_impurity_split=1e-07, bootstrap=False, oob_score=False, n_jobs=1,
-                              verbose=0, warm_start=True, class_weight=None)
+                              criterion='entropy', max_depth=50, min_samples_split=2, min_samples_leaf=100,
+                              max_features="sqrt")
 
 rnd_clf.fit(features_train, labels_train)
 

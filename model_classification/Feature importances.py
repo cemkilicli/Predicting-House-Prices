@@ -71,7 +71,7 @@ from sklearn.ensemble import ExtraTreesClassifier
 # Build a forest and compute the feature importances
 forest = ExtraTreesClassifier(n_estimators=350,
                               criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=2,
-                              min_weight_fraction_leaf=0.0, max_features=12, max_leaf_nodes=None,
+                              min_weight_fraction_leaf=0.0, max_features="sqrt", max_leaf_nodes=None,
                               min_impurity_split=1e-07, bootstrap=False, oob_score=False, n_jobs=1,
                               verbose=0, warm_start=True, class_weight=None)
 
@@ -89,8 +89,9 @@ from sklearn.metrics import accuracy_score
 print "accuracy is", accuracy_score(labels_test, pred)
 print "root mean squared error is", sqrt(mean_squared_error(labels_test, pred))
 
+from sklearn.metrics import confusion_matrix
+print confusion_matrix(labels_test, pred)
 
-"""
 
 # Print the feature ranking
 print("Feature ranking:")
@@ -105,6 +106,3 @@ plt.bar(range(data_features_train.shape[1]), importances[indices],
 plt.xticks(range(data_features_train.shape[1]), columns[indices], rotation=90, label='small')
 plt.xlim([-1, data_features_train.shape[1]])
 plt.show()
-
-
-"""
