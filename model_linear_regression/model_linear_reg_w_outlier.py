@@ -31,21 +31,6 @@ for features in cat_labels:
     train[features] = le.transform(train[features])
 
 
-#find & remove outliers in saleprice
-low_salesprice = train["SalePrice"].quantile(q=0.25)
-high_salesprice = train["SalePrice"].quantile(q=0.75)
-
-IRQ = high_salesprice - low_salesprice
-IRQ = IRQ * 1.5
-outliers = high_salesprice + IRQ
-
-# Remove outliers from sales price
-outliers =  train[train["SalePrice"].gt(outliers)].index
-for outlier in outliers:
-    train.drop(outlier, inplace=True)
-
-
-
 #Find correlation
 corrolations = train.corr()['SalePrice'][:-1]
 golden_feature_list = corrolations[abs(corrolations) > 0.5].sort_values(ascending = False)

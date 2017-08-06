@@ -55,9 +55,6 @@ data_features_train = imp.transform(data_features_train)
 # Create train test split
 features_train, features_test, labels_train, labels_test = train_test_split(data_features_train, data_labels_train, test_size=0.25, random_state=42)
 
-print features_train.shape
-print labels_train.shape
-
 from sklearn.linear_model import Lasso
 clf = Lasso(alpha=0.1)
 clf.fit(features_train,labels_train)
@@ -77,5 +74,4 @@ print "Mean sqared error", np.sqrt(np.mean((predicted-labels_test)**2))
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % clf.score(features_test, labels_test))
 
-
-#Define the alpha values to test
+print "Score", clf.score(features_train,labels_train)
