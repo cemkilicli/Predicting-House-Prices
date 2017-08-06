@@ -73,7 +73,8 @@ print('Coefficients: \n', lr.coef_)
 print "Mean sqared error", np.sqrt(np.mean((predicted-labels_test)**2))
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % lr.score(features_test, labels_test))
-print "Score", lr.score(features_train,labels_train)
+from sklearn.metrics import r2_score
+print "R-squared Error",r2_score(predicted,labels_test)
 
 #Regression plot
 sns.regplot(x = labels_test ,  y = predicted ,  data= train)

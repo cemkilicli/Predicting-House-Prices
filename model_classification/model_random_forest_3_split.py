@@ -87,6 +87,8 @@ print " "
 print "Validate Scores"
 print "Accuracy is:", accuracy_score(labels_validate, pred_validate)
 print "RMSE is:", sqrt(mean_squared_error(labels_validate, pred_validate))
+from sklearn.metrics import r2_score
+print "R-squared Error",r2_score(pred_validate,labels_test)
 
 # test prediction
 pred_test = rnd_clf.predict(features_test)
@@ -94,3 +96,5 @@ print " "
 print "Test Scores"
 print "Accuracy is:", accuracy_score(labels_test, pred_test)
 print "RMSE is:", sqrt(mean_squared_error(labels_test, pred_test))
+from sklearn.metrics import r2_score
+print "R-squared Error",r2_score(pred_test,labels_test)

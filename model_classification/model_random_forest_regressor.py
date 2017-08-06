@@ -72,6 +72,8 @@ pred= pred.astype(int)
 from sklearn.metrics import accuracy_score
 print "accuracy is", accuracy_score(labels_test, pred)
 print "root mean squared error is", sqrt(mean_squared_error(labels_test, pred))
+from sklearn.metrics import r2_score
+print "R-squared Error",r2_score(pred,labels_test)
 
 from sklearn.metrics import confusion_matrix
 print confusion_matrix(labels_test, pred)

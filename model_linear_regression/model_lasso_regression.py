@@ -74,4 +74,5 @@ print "Mean sqared error", np.sqrt(np.mean((predicted-labels_test)**2))
 # Explained variance score: 1 is perfect prediction
 print('Variance score: %.2f' % clf.score(features_test, labels_test))
 
-print "Score", clf.score(features_train,labels_train)
+from sklearn.metrics import r2_score
+print "R-squared Error",r2_score(predicted,labels_test)

@@ -75,7 +75,8 @@ pred = rnd_clf.predict(features_test)
 from sklearn.metrics import accuracy_score
 print "accuracy is", accuracy_score(labels_test, pred)
 print "root mean squared error is", sqrt(mean_squared_error(labels_test, pred))
-print rnd_clf.score(features_train, labels_train)
+from sklearn.metrics import r2_score
+print "R-squared Error",r2_score(labels_test,labels_test)
 
 from sklearn.metrics import confusion_matrix
 print confusion_matrix(labels_test, pred)
