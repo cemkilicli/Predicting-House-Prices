@@ -43,13 +43,20 @@ group_names = [1, 2, 3, 4]
 categories = pd.cut(train['SalePrice'], bins, labels=group_names)
 train['categories'] = pd.cut(train['SalePrice'], bins, labels=group_names)
 
+"""
 # Display newly created categories
 sns.countplot(x="categories", data=train)
 plt.show()
+"""
 
 # separate features
 data_labels_train = train["categories"]
 data_features_train = train.drop("categories", axis=1)
+data_features_train = data_features_train.drop("Id", axis=1)
+data_features_train = data_features_train.drop("SalePrice", axis=1)
+
+columns = data_features_train.columns
+
 
 # Handle missing values in Training Data Set
 imp = Imputer(missing_values='NaN', strategy='mean', axis=0)
@@ -62,8 +69,11 @@ features_train, features_test, labels_train, labels_test = train_test_split(data
 from sklearn.ensemble import ExtraTreesClassifier
 
 # Build a forest and compute the feature importances
-forest = ExtraTreesClassifier(n_estimators=300,
-                              max_features="auto")
+forest = ExtraTreesClassifier(n_estimators=350,
+                              criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=2,
+                              min_weight_fraction_leaf=0.0, max_features=12, max_leaf_nodes=None,
+                              min_impurity_split=1e-07, bootstrap=False, oob_score=False, n_jobs=1,
+                              verbose=0, warm_start=True, class_weight=None)
 
 
 forest.fit(features_train, labels_train)
@@ -80,18 +90,21 @@ print "accuracy is", accuracy_score(labels_test, pred)
 print "root mean squared error is", sqrt(mean_squared_error(labels_test, pred))
 
 
+"""
+
 # Print the feature ranking
 print("Feature ranking:")
-
 for f in range(data_features_train.shape[1]):
-    print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
+    print columns[indices[f]], importances[indices[f]]
 
 # Plot the feature importances of the forest
 plt.figure()
 plt.title("Feature importances")
 plt.bar(range(data_features_train.shape[1]), importances[indices],
-       color="r")
-plt.xticks(range(data_features_train.shape[1]), indices, rotation=90, label='small')
+       color="b")
+plt.xticks(range(data_features_train.shape[1]), columns[indices], rotation=90, label='small')
 plt.xlim([-1, data_features_train.shape[1]])
 plt.show()
 
+
+"""

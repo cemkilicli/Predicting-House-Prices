@@ -50,7 +50,6 @@ plt.show()
 # separate features
 data_labels_train = train["categories"]
 data_features_train = train.drop("categories", axis=1)
-data_features_train = train.drop("SalePrice", axis=1)
 
 
 # Handle missing values in Training Data Set
@@ -61,16 +60,17 @@ data_features_train = imp.transform(data_features_train)
 # Create train test split
 features_train, features_test, labels_train, labels_test = train_test_split(data_features_train, data_labels_train, test_size=0.25, random_state=42)
 
-from sklearn.ensemble import RandomForestClassifier
-rnd_clf = RandomForestClassifier(n_estimators=350,
+from sklearn.ensemble import RandomForestRegressor
+rnd_clf = RandomForestRegressor(n_estimators=350,
                               criterion='gini', max_depth=None, min_samples_split=2, min_samples_leaf=2,
                               min_weight_fraction_leaf=0.0, max_features=12, max_leaf_nodes=None,
                               min_impurity_split=1e-07, bootstrap=False, oob_score=False, n_jobs=1,
                               verbose=0, warm_start=True, class_weight=None)
 
-
 rnd_clf.fit(features_train, labels_train)
 pred = rnd_clf.predict(features_test)
+
+pred= pred.astype(int)
 
 print pred
 

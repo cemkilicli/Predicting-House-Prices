@@ -63,9 +63,22 @@ data_features_train = data_features_train.filter(["OverallQual", "GrLivArea", "G
 
 print data_features_train.head(5)
 
+# Create bins for categories
+min_salesprice = train["SalePrice"].min() - 1
+max_salesprice = train["SalePrice"].max() + 1
+mean_salesprice = train["SalePrice"].median()
+low_salesprice = train["SalePrice"].quantile(q=0.25)
+high_salesprice = train["SalePrice"].quantile(q=0.75)
+
+# Create bins and categories
+bins = [min_salesprice, low_salesprice, mean_salesprice, high_salesprice, max_salesprice]
+group_names = [1, 2, 3, 4]
+categories = pd.cut(train['SalePrice'], bins, labels=group_names)
+train['categories'] = pd.cut(train['SalePrice'], bins, labels=group_names)
 
 
 data_labels_train = train["SalePrice"]
+
 
 
 #Handle missing values in Training Data Set
@@ -96,3 +109,5 @@ print('Variance score: %.2f' % lr.score(features_test, labels_test))
 #Regression plot
 sns.regplot(x = labels_test ,  y = predicted ,  data= train)
 plt.show()
+
+
