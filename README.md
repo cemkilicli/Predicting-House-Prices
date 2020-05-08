@@ -1,1 +1,1 @@
-# bda551_predicting_house_prices
+# A forecasting model for BDA551
